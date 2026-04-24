@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block page_title %}Users{% endblock %}
+{% block page_sub %}SOC analysts and administrators{% endblock %}
+{% block content %}
+<div class="ph">
+  <div><h2>Users</h2><p>{{ users|length }} registered user(s)</p></div>
+  <a href="/users/add" class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Add User</a>
+</div>
+<div class="card">
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Department</th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td class="td-id">#{{ u.user_id }}</td>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar">{{ u.name[0]|upper }}</div>
+              <span class="td-title">{{ u.name }}</span>
+            </div>
+          </td>
+          <td class="td-muted">{{ u.email }}</td>
+          <td><span class="badge b-purple">{{ u.role }}</span></td>
+          <td class="td-muted">{{ u.department }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5"><div class="empty"><i class="bi bi-people"></i><p>No users found.</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

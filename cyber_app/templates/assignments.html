@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block page_title %}Assignments{% endblock %}
+{% block page_sub %}Incidents assigned to SOC analysts{% endblock %}
+{% block content %}
+<div class="ph">
+  <div><h2>Incident Assignments</h2><p>{{ assignments|length }} active assignment(s)</p></div>
+</div>
+<div class="card">
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Incident</th><th>Severity</th><th>Assigned Analyst</th><th>Department</th><th>Role</th></tr></thead>
+      <tbody>
+        {% for a in assignments %}
+        <tr>
+          <td class="td-title">{{ a.title }}</td>
+          <td>
+            {% if a.severity=='Critical'%}<span class="badge b-critical">● Critical</span>
+            {% elif a.severity=='High'%}<span class="badge b-high">● High</span>
+            {% elif a.severity=='Medium'%}<span class="badge b-medium">● Medium</span>
+            {% else %}<span class="badge b-low">● Low</span>{% endif %}
+          </td>
+          <td>
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar">{{ a.name[0]|upper }}</div>
+              <span style="color:#0f172a;font-weight:500;">{{ a.name }}</span>
+            </div>
+          </td>
+          <td class="td-muted">{{ a.department }}</td>
+          <td><span class="badge b-purple">{{ a.role_on_incident }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5"><div class="empty"><i class="bi bi-person-lines-fill"></i><p>No assignments found.</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

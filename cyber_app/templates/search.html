@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block page_title %}Search{% endblock %}
+{% block page_sub %}Search across all incidents{% endblock %}
+{% block content %}
+<div style="max-width:620px;margin-bottom:28px;">
+  <form method="GET">
+    <div style="display:flex;gap:12px;">
+      <input class="form-input" type="text" name="q"
+             value="{{ query }}"
+             placeholder="Search by title, description, or asset..."
+             style="flex:1;">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </div>
+  </form>
+</div>
+
+{% if results %}
+<div class="alert alert-info">
+  <i class="bi bi-info-circle-fill"></i>
+  Found <strong>{{ results|length }}</strong> result(s) for "<strong>{{ query }}</strong>"
+</div>
+<div class="card">
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Title</th><th>Severity</th><th>Status</th><th>Asset</th></tr></thead>
+      <tbody>
+        {% for i in results %}
+        <tr>
+          <td class="td-id">#{{ i.incident_id }}</td>
+          <td class="td-title">{{ i.title }}</td>
+          <td>
+            {% if i.severity=='Critical'%}<span class="badge b-critical">● Critical</span>
+            {% elif i.severity=='High'%}<span class="badge b-high">● High</span>
+            {% elif i.severity=='Medium'%}<span class="badge b-medium">● Medium</span>
+            {% else %}<span class="badge b-low">● Low</span>{% endif %}
+          </td>
+          <td>
+            {% if i.status=='Open'%}<span class="badge b-open">Open</span>
+            {% elif i.status=='In Progress'%}<span class="badge b-progress">In Progress</span>
+            {% else %}<span class="badge b-closed">Closed</span>{% endif %}
+          </td>
+          <td class="td-muted">{{ i.affected_asset }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% elif query %}
+<div class="empty" style="padding:40px 0;">
+  <i class="bi bi-search" style="font-size:48px;color:#e2e8f0;display:block;margin-bottom:14px;"></i>
+  <p>No results for "<strong>{{ query }}</strong>"</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block page_title %}Threats{% endblock %}
+{% block page_sub %}Known threat intelligence catalog{% endblock %}
+{% block content %}
+<div class="ph">
+  <div><h2>Threat Catalog</h2><p>{{ threats|length }} known threat(s)</p></div>
+</div>
+<div class="card">
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Threat Name</th><th>Type</th><th>Global Severity</th><th>Reference</th></tr></thead>
+      <tbody>
+        {% for t in threats %}
+        <tr>
+          <td class="td-id">#{{ t.threat_id }}</td>
+          <td class="td-title">{{ t.threat_name }}</td>
+          <td><span class="badge b-blue">{{ t.threat_type }}</span></td>
+          <td>
+            {% if t.global_severity=='Critical'%}<span class="badge b-critical">● Critical</span>
+            {% elif t.global_severity=='High'%}<span class="badge b-high">● High</span>
+            {% elif t.global_severity=='Medium'%}<span class="badge b-medium">● Medium</span>
+            {% else %}<span class="badge b-low">● Low</span>{% endif %}
+          </td>
+          <td>
+            {% if t.reference_url %}
+            <a href="{{ t.reference_url }}" target="_blank" class="btn btn-ghost" style="font-size:12px;padding:5px 12px;">
+              <i class="bi bi-box-arrow-up-right"></i> Reference
+            </a>
+            {% else %}<span class="td-muted">—</span>{% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5"><div class="empty"><i class="bi bi-bug"></i><p>No threats found.</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

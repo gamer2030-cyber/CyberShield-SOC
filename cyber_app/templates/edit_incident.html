@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block page_title %}Edit Incident{% endblock %}
+{% block page_sub %}Update incident details{% endblock %}
+{% block content %}
+<div style="max-width:780px;">
+  <div class="card">
+    <div class="card-head">
+      <div class="card-head-title">
+        <i class="bi bi-pencil-square" style="color:#f59e0b"></i>
+        Edit Incident #{{ incident.incident_id }}
+      </div>
+      <a href="/incidents" class="btn btn-ghost"><i class="bi bi-arrow-left"></i> Back</a>
+    </div>
+    <div class="card-body">
+      <form method="POST">
+        <div class="form-grid">
+          <div class="form-group span2">
+            <label class="form-label">Incident Title *</label>
+            <input class="form-input" type="text" name="title" value="{{ incident.title }}" required>
+          </div>
+          <div class="form-group span2">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" name="description">{{ incident.description }}</textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Severity</label>
+            <select class="form-select" name="severity">
+              {% for s in ['Low','Medium','High','Critical'] %}
+              <option {% if incident.severity==s %}selected{% endif %}>{{ s }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <input class="form-input" type="text" name="category" value="{{ incident.category }}">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" name="status">
+              {% for s in ['Open','In Progress','Closed'] %}
+              <option {% if incident.status==s %}selected{% endif %}>{{ s }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Affected Asset</label>
+            <input class="form-input" type="text" name="affected_asset" value="{{ incident.affected_asset }}">
+          </div>
+        </div>
+        <div style="margin-top:28px;display:flex;gap:12px;">
+          <button type="submit" class="btn btn-warning"><i class="bi bi-check-lg"></i> Save Changes</button>
+          <a href="/incidents" class="btn btn-ghost">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

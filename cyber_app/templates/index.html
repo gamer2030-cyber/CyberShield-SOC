@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_sub %}Welcome back — here's what's happening{% endblock %}
+{% block content %}
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-ico ico-blue"><i class="bi bi-exclamation-triangle-fill"></i></div>
+    <div><div class="stat-num">{{ stats.total }}</div><div class="stat-lbl">Total Incidents</div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-ico ico-red"><i class="bi bi-fire"></i></div>
+    <div><div class="stat-num">{{ open_stats.open_count }}</div><div class="stat-lbl">Open Incidents</div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-ico ico-amber"><i class="bi bi-bug-fill"></i></div>
+    <div><div class="stat-num">{{ threat_count.total }}</div><div class="stat-lbl">Known Threats</div></div>
+  </div>
+  <div class="stat">
+    <div class="stat-ico ico-green"><i class="bi bi-people-fill"></i></div>
+    <div><div class="stat-num">{{ user_count.total }}</div><div class="stat-lbl">Active Analysts</div></div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-head">
+    <div class="card-head-title">
+      <i class="bi bi-lightning-charge-fill" style="color:#f59e0b"></i> Recent Incidents
+    </div>
+    <a href="/incidents/add" class="btn btn-primary"><i class="bi bi-plus-lg"></i> New Incident</a>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>ID</th><th>Title</th><th>Severity</th><th>Category</th><th>Status</th><th>Asset</th></tr>
+      </thead>
+      <tbody>
+        {% for i in recent %}
+        <tr>
+          <td class="td-id">#{{ i.incident_id }}</td>
+          <td class="td-title">{{ i.title }}</td>
+          <td>
+            {% if i.severity=='Critical'%}<span class="badge b-critical">● Critical</span>
+            {% elif i.severity=='High'%}<span class="badge b-high">● High</span>
+            {% elif i.severity=='Medium'%}<span class="badge b-medium">● Medium</span>
+            {% else %}<span class="badge b-low">● Low</span>{% endif %}
+          </td>
+          <td class="td-muted">{{ i.category }}</td>
+          <td>
+            {% if i.status=='Open'%}<span class="badge b-open">Open</span>
+            {% elif i.status=='In Progress'%}<span class="badge b-progress">In Progress</span>
+            {% else %}<span class="badge b-closed">Closed</span>{% endif %}
+          </td>
+          <td class="td-muted">{{ i.affected_asset }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6"><div class="empty"><i class="bi bi-inbox"></i><p>No incidents yet.</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

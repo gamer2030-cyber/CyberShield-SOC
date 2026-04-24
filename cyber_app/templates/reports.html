@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block page_title %}Reports & Analytics{% endblock %}
+{% block page_sub %}Aggregate queries and system statistics{% endblock %}
+{% block content %}
+<div class="grid-2">
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-head-title">
+        <i class="bi bi-bar-chart-fill" style="color:#6366f1"></i> Incidents by Severity
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Severity</th><th>Total Incidents</th></tr></thead>
+        <tbody>
+          {% for r in by_severity %}
+          <tr>
+            <td>
+              {% if r.severity=='Critical'%}<span class="badge b-critical">● Critical</span>
+              {% elif r.severity=='High'%}<span class="badge b-high">● High</span>
+              {% elif r.severity=='Medium'%}<span class="badge b-medium">● Medium</span>
+              {% else %}<span class="badge b-low">● Low</span>{% endif %}
+            </td>
+            <td><strong style="color:#0f172a;font-size:16px;">{{ r.total }}</strong></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="2" class="td-muted" style="padding:20px;">No data</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-head-title">
+        <i class="bi bi-pie-chart-fill" style="color:#10b981"></i> Incidents by Status
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Status</th><th>Total Incidents</th></tr></thead>
+        <tbody>
+          {% for r in by_status %}
+          <tr>
+            <td>
+              {% if r.status=='Open'%}<span class="badge b-open">Open</span>
+              {% elif r.status=='In Progress'%}<span class="badge b-progress">In Progress</span>
+              {% else %}<span class="badge b-closed">Closed</span>{% endif %}
+            </td>
+            <td><strong style="color:#0f172a;font-size:16px;">{{ r.total }}</strong></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="2" class="td-muted" style="padding:20px;">No data</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-head-title">
+        <i class="bi bi-bug-fill" style="color:#f59e0b"></i> Threat Detection Stats
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Threat</th><th>Linked Incidents</th><th>Avg Confidence</th></tr></thead>
+        <tbody>
+          {% for r in threat_stats %}
+          <tr>
+            <td class="td-title">{{ r.threat_name }}</td>
+            <td style="color:#0f172a;">{{ r.linked_incidents }}</td>
+            <td><span class="badge b-purple">{{ r.avg_confidence }}%</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="td-muted" style="padding:20px;">No data</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div class="card-head-title">
+        <i class="bi bi-people-fill" style="color:#3b82f6"></i> Analyst Workload
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Analyst</th><th>Assigned Incidents</th></tr></thead>
+        <tbody>
+          {% for r in analyst_load %}
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <div class="avatar">{{ r.name[0]|upper }}</div>
+                <span class="td-title">{{ r.name }}</span>
+              </div>
+            </td>
+            <td><strong style="color:#0f172a;font-size:16px;">{{ r.total_assigned }}</strong></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="2" class="td-muted" style="padding:20px;">No data</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
